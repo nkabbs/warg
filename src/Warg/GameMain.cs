@@ -30,7 +30,7 @@ namespace Warg
 
 			var circle = Content.Load<Texture2D>("Circle.png");
 
-			_organism = new Organism(circle, Color.DarkOrange, 30, new Vector2(400, 200));
+			_organism = new Organism(circle, Color.DarkOrange, 30, new Vector2(400, 200), new Vector2(0.5f));
 		}
 
 		protected override void UnloadContent()

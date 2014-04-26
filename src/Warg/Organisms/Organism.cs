@@ -12,12 +12,13 @@ namespace Warg.Organisms
 		public Vector2 Postion { get; protected set; }
 		public Vector2 Velocity { get; protected set; }
 
-		public Organism(Texture2D texture, Color color, int radius, Vector2 startingPosition)
+		public Organism(Texture2D texture, Color color, int radius, Vector2 startingPosition, Vector2 velocity)
 		{
 			Texture = texture;
 			Color = color;
 			Radius = radius;
 			Postion = startingPosition;
+			Velocity = velocity;
 		}
 
 		public void Update(GameTime gameTime)
