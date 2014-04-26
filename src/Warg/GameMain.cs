@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Warg.Organisms;
 
 namespace Warg
 {
@@ -8,6 +9,8 @@ namespace Warg
 	{
 		GraphicsDeviceManager _graphics;
 		SpriteBatch _spriteBatch;
+
+		private Organism _organism;
 
 		public GameMain()
 			: base()
@@ -25,6 +28,9 @@ namespace Warg
 		{
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
+			var circle = Content.Load<Texture2D>("Circle.png");
+
+			_organism = new Organism(circle, Color.DarkOrange, 30, new Vector2(400, 200));
 		}
 
 		protected override void UnloadContent()
@@ -37,12 +43,20 @@ namespace Warg
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
+			_organism.Update(gameTime);
+
 			base.Update(gameTime);
 		}
 
 		protected override void Draw(GameTime gameTime)
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
+
+			_spriteBatch.Begin();
+
+			_organism.Draw(_spriteBatch);
+
+			_spriteBatch.End();
 
 			base.Draw(gameTime);
 		}
