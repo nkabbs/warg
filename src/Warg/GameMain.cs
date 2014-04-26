@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Warg.Organisms;
@@ -10,7 +11,8 @@ namespace Warg
 		GraphicsDeviceManager _graphics;
 		SpriteBatch _spriteBatch;
 
-		private Organism _organism;
+		private OrganismGenerator _organismGenerator;
+		private List<Organism> _organisms;
 
 		public GameMain()
 			: base()
@@ -20,6 +22,7 @@ namespace Warg
 		}
 		protected override void Initialize()
 		{
+			_organisms = new List<Organism>();
 
 			base.Initialize();
 		}
@@ -29,8 +32,12 @@ namespace Warg
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			var circle = Content.Load<Texture2D>("Circle.png");
+			_organismGenerator = new OrganismGenerator(circle);
 
-			_organism = new Organism(circle, Color.DarkOrange, 30, new Vector2(400, 200), new Vector2(0.5f));
+			for (var i = 0; i < 500; i++)
+			{
+				_organisms.Add(_organismGenerator.CreateOrganism());
+			}
 		}
 
 		protected override void UnloadContent()
@@ -43,7 +50,7 @@ namespace Warg
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-			_organism.Update(gameTime);
+			_organisms.ForEach(x => x.Update(gameTime));
 
 			base.Update(gameTime);
 		}
@@ -54,7 +61,7 @@ namespace Warg
 
 			_spriteBatch.Begin();
 
-			_organism.Draw(_spriteBatch);
+			_organisms.ForEach(x => x.Draw(_spriteBatch));
 
 			_spriteBatch.End();
 

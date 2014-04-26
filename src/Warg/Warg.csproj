@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="GameMain.cs" />
     <Compile Include="Organisms\Organism.cs" />
+    <Compile Include="Organisms\OrganismGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
