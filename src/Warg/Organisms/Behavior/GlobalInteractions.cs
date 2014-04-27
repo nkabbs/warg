@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Warg.Organisms;
+﻿using System.Collections.Generic;
 
-namespace Warg
+namespace Warg.Organisms.Behavior
 {
 	public static class GlobalInteractions
 	{
