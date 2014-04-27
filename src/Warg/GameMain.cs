@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Warg.Drawing;
+using Warg.Input;
 using Warg.Organisms;
 
 namespace Warg
@@ -13,6 +15,9 @@ namespace Warg
 
 		private OrganismGenerator _organismGenerator;
 		private List<Organism> _organisms;
+		private Camera _camera;
+		private InputManager _input;
+		private Vector2 _worldSize;
 
 		public GameMain()
 			: base()
@@ -22,7 +27,13 @@ namespace Warg
 		}
 		protected override void Initialize()
 		{
+			_worldSize = new Vector2(800, 800);
 			_organisms = new List<Organism>();
+
+			_camera = new Camera(_worldSize, 
+				new Vector2(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight));
+
+			_input = new InputManager(_camera);
 
 			base.Initialize();
 		}
@@ -50,7 +61,12 @@ namespace Warg
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
+			_input.Update(gameTime, Keyboard.GetState());
+
 			_organisms.ForEach(x => x.Update(gameTime));
+
+			_camera.Update(gameTime);
+
 
 			base.Update(gameTime);
 		}
@@ -59,7 +75,9 @@ namespace Warg
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			_spriteBatch.Begin();
+			_spriteBatch.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend
+				,SamplerState.LinearWrap, DepthStencilState.None, RasterizerState.CullNone,
+				null, _camera.Transform);
 
 			_organisms.ForEach(x => x.Draw(_spriteBatch));
 
