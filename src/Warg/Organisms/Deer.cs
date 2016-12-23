@@ -8,10 +8,9 @@ using Warg.Drawing;
 
 namespace Warg.Organisms
 {
-    class Grass: Organism
+    class Deer: Organism
     {
-
-        public Grass(Texture2D texture,
+        public Deer(Texture2D texture,
             Color color,
             int radius,
             Vector2 startingPosition,
@@ -37,13 +36,5 @@ namespace Warg.Organisms
             Rando = new Random();
             alive = true;
         }
-        public override Organism Reproduce()
-        {
-            Vector2 startPos = Position + new Vector2(Rando.Next(-25, 25), Rando.Next(-25, 25));
-            Organism o = new Organism(Texture, Color, Radius, startPos, new Vector2(0, 0), MyType, Energy / 2, VisionRadius, ReproductionThreshold, ReactionDictionary);
-            Energy = Energy / 2;
-            return o;
-        }
     }
-
 }

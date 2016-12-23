@@ -23,7 +23,7 @@ namespace Warg.Organisms
             var xVelocity = 0;
             var yVelocity = 0;
 
-            var organism = new Organism(OrganismTexture, GetOrganismColor(OrganismType.GRASS), 25, new Vector2(Rando.Next(-500,500) + 500, Rando.Next(-500,500) + 500),
+            var organism = new Grass(OrganismTexture, GetOrganismColor(OrganismType.GRASS), 25, new Vector2(Rando.Next(-500,500) + 500, Rando.Next(-500,500) + 500),
                 new Vector2(xVelocity, yVelocity), Organism.OrganismType.GRASS, 1f, 100f, 5f,
                 new Dictionary<Organism.OrganismType, Reaction>());
 
@@ -35,8 +35,8 @@ namespace Warg.Organisms
             var xVelocity = Rando.Next(-50, 50) * 0.05f;
             var yVelocity = Rando.Next(-50, 50) * 0.05f;
 
-            var organism = new Organism(OrganismTexture, GetOrganismColor(OrganismType.DEER), 25, new Vector2(Rando.Next(-500, 500) + 500, Rando.Next(-500, 500) + 500),
-                new Vector2(xVelocity, yVelocity), Organism.OrganismType.DEER, 100f, 100f, 8000f,
+            var organism = new Deer(OrganismTexture, GetOrganismColor(OrganismType.DEER), 25, new Vector2(Rando.Next(-500, 500) + 500, Rando.Next(-500, 500) + 500),
+                new Vector2(xVelocity, yVelocity), Organism.OrganismType.DEER, 100f, 100f, 200f,
                 new Dictionary<Organism.OrganismType, Reaction>());
 
             return organism;

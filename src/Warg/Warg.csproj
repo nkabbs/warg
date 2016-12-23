@@ -43,6 +43,8 @@
     <Compile Include="Input\CameraInputHandler.cs" />
     <Compile Include="Input\InputHandler.cs" />
     <Compile Include="Input\InputManager.cs" />
+    <Compile Include="Organisms\Deer.cs" />
+    <Compile Include="Organisms\Grass.cs" />
     <Compile Include="Organisms\Reaction.cs" />
     <Compile Include="Organisms\GlobalInteractions.cs" />
     <Compile Include="Organisms\Organism.cs" />

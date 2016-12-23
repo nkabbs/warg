@@ -9,6 +9,11 @@ namespace Warg.Organisms
 	public class Organism
 	{
 
+        public Organism()
+        {
+
+        }
+
 		protected Texture2D Texture { get; set; }
 		protected Color Color { get; set; }
 
@@ -117,10 +122,10 @@ namespace Warg.Organisms
             }
         }
 
-        public Organism Reproduce()
+        public virtual Organism Reproduce()
         {
             Vector2 startPos = Position + new Vector2(Rando.Next(-25, 25), Rando.Next(-25, 25));
-            Organism o = new Organism(Texture, Color, Radius, startPos, new Vector2(Rando.Next(-5, 5), Rando.Next(-5, 5)), MyType, Energy / 2, VisionRadius, ReproductionThreshold, ReactionDictionary);
+            Organism o = new Organism(Texture, Color, Radius, startPos, new Vector2(0, 0), MyType, Energy / 2, VisionRadius, ReproductionThreshold, ReactionDictionary);
             Energy = Energy / 2;
             return o;
         }
