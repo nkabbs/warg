@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -18,12 +19,14 @@ namespace Warg
 		private Camera _camera;
 		private InputManager _input;
 		private Vector2 _worldSize;
+        private Random Rando;
 
 		public GameMain()
 			: base()
 		{
 			_graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
+            Rando = new Random();
 		}
 		protected override void Initialize()
 		{
@@ -44,10 +47,35 @@ namespace Warg
 
 			var circle = Content.Load<Texture2D>("Circle.png");
 			_organismGenerator = new OrganismGenerator(circle);
+            int choice;
+            EnergyTotal.energy = 0;
 
 			for (var i = 0; i < 500; i++)
 			{
-				_organisms.Add(_organismGenerator.CreateOrganism());
+
+                choice = Rando.Next(100);
+
+                if (choice < 95)
+                    choice = 0;
+                else if (choice < 98)
+                    choice = 1;
+                else
+                    choice = 2;
+
+                switch(choice)
+                {
+                    case (0):
+                        _organisms.Add(_organismGenerator.CreateOrganismGrass());
+                        break;
+                    case 1:
+                        _organisms.Add(_organismGenerator.CreateOrganismDeer());
+                        break;
+                    case 2:
+                        _organisms.Add(_organismGenerator.CreateOrganismWolf());
+                        break;
+
+                }
+                
 			}
 		}
 
@@ -64,7 +92,36 @@ namespace Warg
 			_input.Update(gameTime, Keyboard.GetState());
 
 			_organisms.ForEach(x => x.Update(gameTime));
+            foreach (Organism o in _organisms)
+            {
 
+                
+
+                if (o.MyType == Organism.OrganismType.DEER)
+                {
+                    foreach (Organism j in _organisms)
+                    {
+
+                        if (j.MyType == Organism.OrganismType.GRASS && Math.Abs(j.Position.X - o.Position.X) + Math.Abs(j.Position.Y - o.Position.Y) < 5)
+                        {
+                            o.Consume(j);
+                        }
+                    }
+                }
+            }
+
+            for (int i = 0; i < _organisms.Count; i++)
+            {
+                Organism o = _organisms[i];
+                if (o.Energy > o.ReproductionThreshold)
+                {
+                    _organisms.Add(o.Reproduce());
+                }
+                else if (!o.alive)
+                {
+                    _organisms.Remove(o);
+                }
+            }
 			_camera.Update(gameTime);
 
 

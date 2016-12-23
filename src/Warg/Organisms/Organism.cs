@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Warg.Drawing;
 
 namespace Warg.Organisms
 {
@@ -11,9 +12,10 @@ namespace Warg.Organisms
 		protected Texture2D Texture { get; set; }
 		protected Color Color { get; set; }
 
+        public Random Rando;
 		public int Radius { get; protected set; }
-		public Vector2 Postion { get; protected set; }
-		public Vector2 Velocity { get; protected set; }
+		public Vector2 Position { get; protected set; }
+		public Vector2 Velocity { get; set; }
 
 		public Vector2 MostImportantOrganismDirection { get; set; }
 		public Reaction MostImportantOrganismTypeReaction { get; set; }
@@ -25,6 +27,7 @@ namespace Warg.Organisms
 		public float ReproductionThreshold { get; set; }
 		public OrganismType MyType { get; set; }
 		public Dictionary<Organism.OrganismType, Reaction> ReactionDictionary { get; set; }
+        public Boolean alive;
 
 		public enum OrganismType
 		{
@@ -33,41 +36,49 @@ namespace Warg.Organisms
 			WOLF,
 		}
 
-		//End Properties
+        //End Properties
 
-		public Organism(Texture2D texture, 
-			Color color, 
-			int radius, 
-			Vector2 startingPosition, 
-			Vector2 velocity,
-			Organism.OrganismType organismType, 
-			float initialEnergy, 
-			float visionRadius, 
-			float reproductionThreshold,
-			Dictionary<Organism.OrganismType, Reaction> reactionDictionary)
-		{
-			Texture = texture;
-			Color = color;
-			Radius = radius;
-			Postion = startingPosition;
-			Velocity = velocity;
+        public Organism(Texture2D texture,
+            Color color,
+            int radius,
+            Vector2 startingPosition,
+            Vector2 velocity,
+            Organism.OrganismType organismType,
+            float initialEnergy,
+            float visionRadius,
+            float reproductionThreshold,
+            Dictionary<Organism.OrganismType, Reaction> reactionDictionary)
+        {
+            Texture = texture;
+            Color = color;
+            Radius = radius;
+            Position = startingPosition;
+            Velocity = velocity;
 
-			MyType = organismType;
-			Energy = initialEnergy;
-			VisionRadius = visionRadius;
-			ReproductionThreshold = reproductionThreshold;
-			ReactionDictionary = reactionDictionary;
-
-		}
+            MyType = organismType;
+            Energy = initialEnergy;
+            VisionRadius = visionRadius;
+            ReproductionThreshold = reproductionThreshold;
+            ReactionDictionary = reactionDictionary;
+            Rando = new Random();
+            alive = true;
+        }
+	
 
 		public void Update(GameTime gameTime)
 		{
-			Postion += Velocity;
-		}
+			Position += Velocity;
+            Move();
+            UpdateEnergy();
+
+            if (Energy <= 0)
+                Die();
+            
+        }
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(Texture, new Rectangle((int)Postion.X, (int)Postion.Y, Radius, Radius), Color);
+			spriteBatch.Draw(Texture, new Rectangle((int)Position.X, (int)Position.Y, Radius, Radius), Color);
 		}
 
 		//Behavior Methods
@@ -78,30 +89,79 @@ namespace Warg.Organisms
 			SetAcceleration();
 		}
 
-		private void SetAcceleration() //set acceleration based on MostImportnatOrganismTypeReaction and MostImportantOrganismDirection.  Or randomly or something if there is no nearby organism
+		private void SetAcceleration() //set acceleration based on MostImportantOrganismTypeReaction and MostImportantOrganismDirection.  Or randomly or something if there is no nearby organism
 		{
 	        
 			Move();
 		}
 
-		private void Move() //set velocity based on acceleration, set position based on velocity
-		{
-	        
-		}
+        private void UpdateEnergy()
+        {
+            switch (MyType)
+            {
+                case OrganismType.GRASS:
+                    if (EnergyTotal.energy > 0)
+                    {
+                        Energy += .01f;
+                        EnergyTotal.energy -= .01f;
+                    }
+                    break;
+                case OrganismType.DEER:
+                    Energy -= .05f;
+                    EnergyTotal.energy += .05f;
+                    break;
+                case OrganismType.WOLF:
+                    Energy -= .05f;
+                    EnergyTotal.energy += .05f;
+                    break;
+            }
+        }
 
-		private void Reproduce() //called when energy exceeds energy threshold, creates a new mutated 'child organism' with half the current organism's energy
+        public Organism Reproduce()
+        {
+            Vector2 startPos = Position + new Vector2(Rando.Next(-25, 25), Rando.Next(-25, 25));
+            Organism o = new Organism(Texture, Color, Radius, startPos, new Vector2(Rando.Next(-5, 5), Rando.Next(-5, 5)), MyType, Energy / 2, VisionRadius, ReproductionThreshold, ReactionDictionary);
+            Energy = Energy / 2;
+            return o;
+        }
+
+		public void Move() //set velocity based on acceleration, set position based on velocity
 		{
-	        
-		}
+            if (this.MyType != OrganismType.GRASS)
+            {
+                if (this.Position.X > 1000)
+                {
+                    Velocity += new Vector2(-.1f, 0);
+                }
+                if (this.Position.X < 0)
+                {
+                    Velocity += new Vector2(.1f, 0);
+                }
+                if (this.Position.Y > 1000)
+                {
+                    Velocity += new Vector2(0, -.1f);
+                }
+                if (this.Position.Y < 0)
+                {
+                    Velocity += new Vector2(0, .1f);
+                }
+            }
+        }
 
 		private void Die() //called when energy <= 0
 		{
-	        
+            alive = false;
 		}
 
-		private void Consume() //called when organism is in direct contact with 'something it can consume'
+		public void Consume(Organism o) //called when organism is in direct contact with 'something it can consume'
 		{
-	        
-		}
+            Velocity = new Vector2(0, 0);
+            o.Velocity = new Vector2(0, 0);
+            Energy += o.Energy;
+            o.Energy = 0;
+            o.alive = false;
+            Velocity = new Vector2(Rando.Next(-5, 5), Rando.Next(-5, 5));
+            
+        }
 	}
 }

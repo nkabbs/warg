@@ -37,15 +37,16 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="EnergyTotal.cs" />
     <Compile Include="GameMain.cs" />
-    <Compile Include="GlobalInteractions.cs" />
     <Compile Include="Drawing\Camera.cs" />
     <Compile Include="Input\CameraInputHandler.cs" />
     <Compile Include="Input\InputHandler.cs" />
     <Compile Include="Input\InputManager.cs" />
+    <Compile Include="Organisms\Reaction.cs" />
+    <Compile Include="Organisms\GlobalInteractions.cs" />
     <Compile Include="Organisms\Organism.cs" />
     <Compile Include="Organisms\OrganismGenerator.cs" />
-    <Compile Include="Organisms\Reaction.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -71,7 +72,9 @@
     </Content>
     <Content Include="Icon.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Organisms\Behavior\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
