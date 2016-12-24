@@ -47,8 +47,8 @@ namespace Warg.Organisms
             var xVelocity = Rando.Next(-50, 50) * 0.05f;
             var yVelocity = Rando.Next(-50, 50) * 0.05f;
 
-            var organism = new Organism(OrganismTexture, GetOrganismColor(OrganismType.WOLF), 25, new Vector2(Rando.Next(-500, 500) + 500, Rando.Next(-500, 500) + 500),
-                new Vector2(xVelocity, yVelocity), Organism.OrganismType.WOLF, 200f, 100f, 16000f,
+            var organism = new Wolf(OrganismTexture, GetOrganismColor(OrganismType.WOLF), 25, new Vector2(Rando.Next(-500, 500) + 500, Rando.Next(-500, 500) + 500),
+                new Vector2(xVelocity, yVelocity), Organism.OrganismType.WOLF, 200f, 200f, 400f,
                 new Dictionary<Organism.OrganismType, Reaction>());
 
             return organism;
@@ -74,9 +74,9 @@ namespace Warg.Organisms
 
             if (o == OrganismType.WOLF)
             {
-                r = Rando.Next(100) + 160;
-                g = Rando.Next(50);
-                b = Rando.Next(50);
+                r = Rando.Next(10) + 240;
+                g = Rando.Next(10) + 240;
+                b = Rando.Next(10) + 240;
             }
 
 			return new Color(r,g,b);

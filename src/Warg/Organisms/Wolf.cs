@@ -8,9 +8,9 @@ using Warg.Drawing;
 
 namespace Warg.Organisms
 {
-    class Deer : Organism
+    class Wolf : Organism
     {
-        public Deer(Texture2D texture,
+        public Wolf(Texture2D texture,
             Color color,
             int radius,
             Vector2 startingPosition,
@@ -37,29 +37,37 @@ namespace Warg.Organisms
             alive = true;
         }
 
+        public Organism findNearestDeer()
+        {
+            double minDistance = 1000f;
+            double distance = 1000f;
+            Organism ret = this;
+
+            foreach (Organism o in OrganismList.organisms)
+            {
+                distance = Math.Sqrt(Math.Pow(o.Position.X - Position.X, 2) + Math.Pow(o.Position.Y - Position.Y, 2));
+                if (o != this && distance < VisionRadius && distance < minDistance && o.MyType == OrganismType.DEER)
+                {
+                    ret = o;
+                    minDistance = distance;
+                }
+            }
+            return ret;
+        }
+
         public override Organism Reproduce()
         {
             Vector2 startPos = Position + new Vector2(Rando.Next(-25, 25), Rando.Next(-25, 25));
-            Deer o = new Deer(Texture, Color, Radius, startPos, new Vector2(Rando.Next(-5, 5), Rando.Next(-5, 5)), MyType, Energy / 2, VisionRadius, ReproductionThreshold, ReactionDictionary);
+            Wolf o = new Wolf(Texture, Color, Radius, startPos, new Vector2(Rando.Next(-5, 5), Rando.Next(-5, 5)), MyType, Energy / 2, VisionRadius, ReproductionThreshold, ReactionDictionary);
             Energy = Energy / 2;
             return o;
         }
 
         public override void Move() //set velocity based on acceleration, set position based on velocity
         {
-            Organism near = findNearestOrganism();
+            Organism near = findNearestDeer();
             if (near.MyType == Organism.OrganismType.DEER)
             {
-
-            }
-
-            if (Velocity.X == 0 && Velocity.Y == 0)
-            {
-                
-            }
-
-            if (near.MyType == Organism.OrganismType.GRASS)
-            {
                 if (near.Position.X > Position.X)
                 {
                     Velocity += new Vector2(.1f, 0f);
@@ -77,43 +85,26 @@ namespace Warg.Organisms
                     Velocity += new Vector2(0f, -.1f);
                 }
             }
-            if (near.MyType == Organism.OrganismType.WOLF)
-            {
-                if (near.Position.X > Position.X)
-                {
-                    Velocity += new Vector2(-.1f, 0f);
-                }
-                if (near.Position.X < Position.X)
-                {
-                    Velocity += new Vector2(.1f, 0f);
-                }
-                if (near.Position.Y > Position.Y)
-                {
-                    Velocity += new Vector2(0f, -.1f);
-                }
-                if (near.Position.Y < Position.Y)
-                {
-                    Velocity += new Vector2(0f, .1f);
-                }
-            }
+            
+
             if (this.Position.X > 1000)
-                {
-                    Velocity += new Vector2(-.1f, 0);
-                }
-                if (this.Position.X < 0)
-                {
-                    Velocity += new Vector2(.1f, 0);
-                }
-                if (this.Position.Y > 1000)
-                {
-                    Velocity += new Vector2(0, -.1f);
-                }
-                if (this.Position.Y < 0)
-                {
-                    Velocity += new Vector2(0, .1f);
-                }
+            {
+                Velocity += new Vector2(-.1f, 0);
             }
-
+            if (this.Position.X < 0)
+            {
+                Velocity += new Vector2(.1f, 0);
+            }
+            if (this.Position.Y > 1000)
+            {
+                Velocity += new Vector2(0, -.1f);
+            }
+            if (this.Position.Y < 0)
+            {
+                Velocity += new Vector2(0, .1f);
+            }
         }
-    
+
+    }
+
 }

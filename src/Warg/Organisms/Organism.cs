@@ -73,6 +73,11 @@ namespace Warg.Organisms
 		public void Update(GameTime gameTime)
 		{
 			Position += Velocity;
+            Radius = (int)Math.Sqrt(Energy) * 2;
+            if (MyType == Organism.OrganismType.GRASS)
+            {
+                Radius = (int) (Math.Sqrt(Energy) * 10);
+            }
             Move();
             UpdateEnergy();
 
@@ -125,12 +130,30 @@ namespace Warg.Organisms
         public virtual Organism Reproduce()
         {
             Vector2 startPos = Position + new Vector2(Rando.Next(-25, 25), Rando.Next(-25, 25));
-            Organism o = new Organism(Texture, Color, Radius, startPos, new Vector2(0, 0), MyType, Energy / 2, VisionRadius, ReproductionThreshold, ReactionDictionary);
+            Organism o = new Organism(Texture, Color, Radius, startPos, new Vector2(Rando.Next(-5, 5), Rando.Next(-5, 5)), MyType, Energy / 2, VisionRadius, ReproductionThreshold, ReactionDictionary);
             Energy = Energy / 2;
             return o;
         }
 
-		public void Move() //set velocity based on acceleration, set position based on velocity
+        public Organism findNearestOrganism()
+        {
+            double minDistance = 1000f;
+            double distance = 1000f;
+            Organism ret = this;
+
+            foreach (Organism o in OrganismList.organisms)
+            {
+                distance = Math.Sqrt(Math.Pow(o.Position.X - Position.X, 2) + Math.Pow(o.Position.Y - Position.Y, 2));
+                if (o != this && distance < VisionRadius && distance < minDistance && o.MyType == OrganismType.GRASS)
+                {
+                    ret = o;
+                    minDistance = distance;
+                }
+            }
+            return ret;
+        }
+
+		public virtual void Move() //set velocity based on acceleration, set position based on velocity
 		{
             if (this.MyType != OrganismType.GRASS)
             {
@@ -165,7 +188,7 @@ namespace Warg.Organisms
             Energy += o.Energy;
             o.Energy = 0;
             o.alive = false;
-            Velocity = new Vector2(Rando.Next(-5, 5), Rando.Next(-5, 5));
+            //Velocity = new Vector2(Rando.Next(-5, 5), Rando.Next(-5, 5));
             
         }
 	}

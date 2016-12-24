@@ -37,13 +37,20 @@ namespace Warg.Organisms
             Rando = new Random();
             alive = true;
         }
+
         public override Organism Reproduce()
         {
-            Vector2 startPos = Position + new Vector2(Rando.Next(-25, 25), Rando.Next(-25, 25));
-            Organism o = new Organism(Texture, Color, Radius, startPos, new Vector2(0, 0), MyType, Energy / 2, VisionRadius, ReproductionThreshold, ReactionDictionary);
+            Vector2 startPos = Position + new Vector2(Rando.Next(-25, 25), Rando.Next(-25, 25)); 
+            while (startPos.X < 0 || startPos.X > 1000 || startPos.Y < 0 || startPos.Y > 1000)
+            {
+                startPos = Position + new Vector2(Rando.Next(-25, 25), Rando.Next(-25, 25));
+            }
+            
+            Grass o = new Grass(Texture, Color, Radius, startPos, new Vector2(0, 0), MyType, Energy / 2, VisionRadius, ReproductionThreshold, ReactionDictionary);
             Energy = Energy / 2;
             return o;
         }
+
     }
 
 }
