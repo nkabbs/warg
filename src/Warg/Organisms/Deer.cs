@@ -22,6 +22,7 @@ namespace Warg.Organisms
             Dictionary<Organism.OrganismType, Reaction> reactionDictionary)
             : base(texture, color, radius, startingPosition, velocity, organismType, initialEnergy, visionRadius, reproductionThreshold, reactionDictionary)
         {
+            ID = Guid.NewGuid();
             Texture = texture;
             Color = color;
             Radius = radius;
@@ -113,7 +114,23 @@ namespace Warg.Organisms
                     Velocity += new Vector2(0, .1f);
                 }
             }
+        public override void Consume(Organism o) //called when organism is in direct contact with 'something it can consume'
+        {
+            Velocity = new Vector2(0, 0);
+            o.Velocity = new Vector2(0, 0);
+            if (o.Energy > 1f)
+            {
+                Energy += o.Energy * .05f;
+                o.Energy -= o.Energy * .05f;
+            } else {
+                Energy += o.Energy;
+                o.Energy = 0;
+                o.alive = false;
+            }
+            //Velocity = new Vector2(Rando.Next(-5, 5), Rando.Next(-5, 5));
 
         }
+
+    }
     
 }

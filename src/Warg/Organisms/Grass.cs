@@ -23,6 +23,7 @@ namespace Warg.Organisms
             Dictionary<Organism.OrganismType, Reaction> reactionDictionary)
             : base(texture, color, radius, startingPosition, velocity, organismType, initialEnergy, visionRadius, reproductionThreshold, reactionDictionary)
         {
+            ID = Guid.NewGuid();
             Texture = texture;
             Color = color;
             Radius = radius;

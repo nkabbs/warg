@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Warg.Drawing;
 using Warg.Input;
 using Warg.Organisms;
+using System.Linq;
 
 namespace Warg
 {
@@ -158,7 +159,19 @@ namespace Warg
 
         public void UpdateOrganisms(GameTime gameTime)
         {
-            OrganismList.organisms.ForEach(x => x.Update(gameTime));
+            //   OrganismList.organisms.ForEach(x => x.Update(gameTime));
+            System.Random rnd = new System.Random();
+            foreach(Organism organism in OrganismList.organisms)
+            {
+                organism.randomID = rnd.Next();
+            }
+
+            OrganismList.organisms = OrganismList.organisms.OrderBy(x => x.randomID).ToList();
+            for(int i = 0; i<OrganismList.organisms.Count; i++)
+            {
+                OrganismList.organisms[i].Update(gameTime);
+            }
+            //OrganismList.organisms.ForEach(x => x.Update(gameTime));
         }
 	}
 

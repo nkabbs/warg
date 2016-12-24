@@ -13,9 +13,14 @@ namespace Warg.Organisms
         {
 
         }
+        public Guid ID { get; set; }
 
 		protected Texture2D Texture { get; set; }
 		protected Color Color { get; set; }
+
+        //new doctor P
+        public decimal randomID { get; set; }
+        //end
 
         public Random Rando;
 		public int Radius { get; protected set; }
@@ -117,8 +122,8 @@ namespace Warg.Organisms
                     }
                     break;
                 case OrganismType.DEER:
-                    Energy -= .05f;
-                    EnergyTotal.energy += .05f;
+                    Energy -= .02f;
+                    EnergyTotal.energy += .02f;
                     break;
                 case OrganismType.WOLF:
                     Energy -= .05f;
@@ -181,7 +186,7 @@ namespace Warg.Organisms
             alive = false;
 		}
 
-		public void Consume(Organism o) //called when organism is in direct contact with 'something it can consume'
+		public virtual void Consume(Organism o) //called when organism is in direct contact with 'something it can consume'
 		{
             Velocity = new Vector2(0, 0);
             o.Velocity = new Vector2(0, 0);
